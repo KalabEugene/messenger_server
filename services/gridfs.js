@@ -15,5 +15,10 @@ router.get("/download/:filename", (req, res) => {
       res.send(error);
     }) */
 });
-
+router.delete("/delete/:id", (req, res) => {
+  let gridFsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: "Storage",
+  });
+  gridFsBucket.delete(req.params.id)
+})
 module.exports = router;

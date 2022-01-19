@@ -30,6 +30,8 @@ app.use("/posts", postRouter);
 app.use("/users", usersRouter);
 app.use("/gridfs", gridFsRouter);
 
+app.get("/test", (req, res) => res.status(200).send("Hello"));
+
 connectDb()
   .then(() => {
     app.listen(PORT, () => {

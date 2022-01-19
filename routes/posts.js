@@ -10,6 +10,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 router.post("/", auth, async (req, res) => {
+  let data = new Date();
   let user = await User.findOne({ email: req.user.email });
   if(req.files){
     require('../services/gridfs_upload').init(req.files.file)
@@ -21,6 +22,7 @@ router.post("/", auth, async (req, res) => {
       file: req.body.file,
       likesUsers: [],
       likes: 0,
+      date: data,
       fileName: req.files.file.name || null 
     }) 
       await post.save();
@@ -33,6 +35,7 @@ router.post("/", auth, async (req, res) => {
         userId: user.userId,
         file: req.body.file,
         likesUsers: [],
+        date: data,
         likes: 0,
       }) 
       await post.save();
