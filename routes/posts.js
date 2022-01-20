@@ -13,7 +13,7 @@ router.post("/", auth, async (req, res) => {
   let data = new Date();
   let user = await User.findOne({ email: req.user.email });
   if(req.files){
-    require('../services/gridfs_upload').init(req.files.file)
+    let fileId = require('../services/gridfs_upload').init(req.files.file)
     const post = new Post({
       text: req.body.text || "Default text",
       userName: user.nickName || "Noname",
@@ -23,7 +23,7 @@ router.post("/", auth, async (req, res) => {
       likesUsers: [],
       likes: 0,
       date: data,
-      fileName: req.files.file.name || null 
+      fileName: fileId || null 
     }) 
       await post.save();
       return res.json(post);

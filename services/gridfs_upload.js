@@ -11,12 +11,13 @@ const streamifier = require("streamifier");
       });
       streamifier
         .createReadStream(file.data)
-        .pipe(gridFsBucket.openUploadStream(filename))
+        .pipe(uploadStream = gridFsBucket.openUploadStream(filename))
         .on("error", () => {
           console.log("Some error occured:" + error);
         })
         .on("finish", () => {
           console.log("done uploading");
         });
+        return uploadStream.id
   }
   }
