@@ -2,56 +2,60 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
 const admin = require("firebase-admin");
 
 router.get("/me", auth, async (req, res) => {
-    const userSearch = await User.findOne({ userId: req.user.id });
-    return res.json(userSearch);
+  const user = await User.findById({ _id: req.user.id });
+  return res.status(200).json(user);
 });
 
 router.post("/", async (req, res) => {
-    let idToken = req.body.token;
-    let fuser = await admin.auth().verifyIdToken(idToken);
-    let user = await User.findOne({ email: fuser.email });
-    if (!user) {
-        user = new User({
-        aboutUser: fuser.aboutUser || "",
-        userName: fuser.name || "Noname",
-        srcImg: fuser.picture || "No photo",
-        userId: fuser.uid,
-        nickName: fuser.nickName || fuser.name || "No nickname",
-        email: fuser.email
-        });
-        await user.save();
+  let idToken = req.body.token;
+  let fuser = await admin.auth().verifyIdToken(idToken);
+  let user = await User.findOne({ email: fuser.email });
+  if (!user) {
+    user = new User({
+      about: fuser.aboutUser || "",
+      name: fuser.name || "Noname",
+      profilepicture: fuser.picture || "No photo",
+      userId: fuser.uid,
+      nickname: fuser.nickName || fuser.name || "No nickname",
+      email: fuser.email,
+    });
+    await user.save();
+  }
+  const token = jwt.sign(
+    { id: user._id, email: user.email },
+    process.env.TOKEN_KEY,
+    {
+      expiresIn: "24h",
     }
-  const token = jwt.sign({id: fuser.uid, email: fuser.email}, process.env.TOKEN_KEY, {
-    expiresIn: "24h",
-  });
-  return res.json({token, ...user});
+  );
+  return res.status(200).json({ token, ...user });
 });
 
 router.put("/", auth, async (req, res) => {
-  const user = await User.findOne({userId: req.user.id});
+  const user = await User.findById({ _id: req.user.id });
   if (user) {
-      if (req.body.aboutUser){
-        user.aboutUser = req.body.aboutUser;
-      }
-      if(req.body.nickName){
-        user.nickName = req.body.nickName;
-      }
-    
+    if (req.body.about) {
+      user.about = req.body.about;
+    }
+    if (req.body.nickname) {
+      user.nickname = req.body.nickname;
+    }
   }
-  console.log(user);
   await user.save();
-  return res.json(user);
+  return res.status(200).json(user);
 });
 
-router.delete("/:id", auth, async (req, res) => {
-  const user = await User.findById(req.params.id);
+router.delete("/", auth, async (req, res) => {
+  const user = await User.findById({ _id: req.user.id });
   if (user) {
     await user.delete();
     return res.send(`User id ${user.id} was deleted!`).status(200);
-  } else return res.send("Error").status(400);
+  } else {
+    return res.status(400).send("Error");
+  }
 });
 module.exports = router;

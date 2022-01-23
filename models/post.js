@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
-  userName: { type: String },
-  srcImg: { type: String },
+  username: { type: String },
+  profilepicture: { type: String },
   text: { type: String },
   userId: { type: String },
-  likes: { type: Number },
-  likesUsers: [{ type: String }],
-  fileName: { type: String },
-  date: { type: Date },
+  likes: { type: Number, default: 0 },
+  likesUsers: { type: Array },
+  fileId: { type: String },
+  createdAt: { type: Date, default: new Date() },
 });
 
 module.exports = mongoose.model("post", postSchema);

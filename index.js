@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const connectDb = require("./routes/config/db");
+const connectDb = require("./services/db");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
@@ -16,7 +16,7 @@ app.use(fileUpload());
 const indexRouter = require("./routes/main");
 const postRouter = require("./routes/posts");
 const usersRouter = require("./routes/users");
-const gridFsRouter = require("./services/gridfs");
+const gridFsRouter = require("./routes/gridfs");
 
 require("./services/firebase").init();
 

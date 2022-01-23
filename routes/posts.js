@@ -5,55 +5,41 @@ const User = require("../models/users");
 const auth = require("../middleware/auth");
 
 router.get("/", auth, async (req, res) => {
-  const posts = await Post.find({});
-  res.send(posts);
+  const posts = await Post.find({}).sort({ createdAt: -1 }).limit(20);
+  res.status(200).send(posts);
+});
+
+router.get("/popularposts", auth, async (req, res) => {
+  const posts = await Post.find({}).sort({ likes: -1 }).limit(10);
+  res.status(200).send(posts);
 });
 
 router.post("/", auth, async (req, res) => {
-  let data = new Date();
-  let user = await User.findOne({ email: req.user.email });
-  if(req.files){
-    let fileId = require('../services/gridfs_upload').init(req.files.file)
-    const post = new Post({
-      text: req.body.text || "Default text",
-      userName: user.nickName || "Noname",
-      srcImg: user.srcImg || "No photo",
-      userId: user.userId,
-      file: req.body.file,
-      likesUsers: [],
-      likes: 0,
-      date: data,
-      fileName: fileId || null 
-    }) 
-      await post.save();
-      return res.json(post);
-  } else {
-      const post = new Post({
-        text: req.body.text || "Default text",
-        userName: user.nickName || "Noname",
-        srcImg: user.srcImg || "No photo",
-        userId: user.userId,
-        file: req.body.file,
-        likesUsers: [],
-        date: data,
-        likes: 0,
-      }) 
-      await post.save();
-      return res.json(post);
-    }
-  
+  let user = await User.findOne({ _id: req.user.id });
+  const post = new Post({
+    text: req.body.text || "Default text",
+    username: user.nickname || "Noname",
+    profilepicture: user.profilepicture || "No photo",
+    userId: req.user.id,
+  });
+  await post.save();
+  if (req.files) {
+    let id = require("../services/gridfs_upload").init(req.files.file);
+    await Post.updateOne({ _id: post._id }, { $set: { fileId: id } });
+  }
+  return res.status(201).json(post);
 });
 
 router.put("/info", auth, async (req, res) => {
   await Post.updateMany(
     { userId: req.user.id },
-    { $set: { userName: req.body.nickName } }
+    { $set: { username: req.body.nickname } }
   );
   return res.send(`Posts was updated!`).status(200);
 });
 
-router.put("/likes", auth, async (req, res) => {
-  const post = await Post.findOne({ _id: req.body.id });
+router.put("/:id/likes", auth, async (req, res) => {
+  const post = await Post.findOne({ _id: req.params.id });
   if (!post.likesUsers.includes(req.user.id)) {
     post.likesUsers.push(req.user.id);
     await Post.updateOne(
@@ -75,6 +61,8 @@ router.delete("/:id", auth, async (req, res) => {
   if (post) {
     await post.delete();
     return res.send(`Post id ${post.id} was deleted!`).status(200);
-  } else return res.send("Error").status(400);
+  } else {
+    return res.status(400).send("Error");
+  }
 });
 module.exports = router;
