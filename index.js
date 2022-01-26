@@ -1,24 +1,24 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const connectDb = require("./services/db");
-const fileUpload = require("express-fileupload");
-const dotenv = require("dotenv");
-const jwt = require("jsonwebtoken");
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import connectDb from "./services/db.js";
+import fileUpload from "express-fileupload";
+import dotenv from "dotenv";
+import firebase from "./services/firebase.js";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-// const connectDb = require('./config/db');
 
-require("dotenv").config();
+dotenv.config();
 
 app.use(fileUpload());
 
-const indexRouter = require("./routes/main");
-const postRouter = require("./routes/posts");
-const usersRouter = require("./routes/users");
-const gridFsRouter = require("./routes/gridfs");
+import { router as indexRouter } from "./routes/main.js";
+import { router as postRouter } from "./routes/posts.js";
+import { router as usersRouter } from "./routes/users.js";
+import { router as gridFsRouter } from "./routes/gridfs.js";
 
-require("./services/firebase").init();
+firebase.init();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

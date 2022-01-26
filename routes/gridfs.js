@@ -1,8 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const mongoose = require("mongoose");
-const fs = require("fs");
-const streamifier = require("streamifier");
+import express from "express";
+export const router = express.Router();
+import mongoose from "mongoose";
 
 router.get("/download/:fileId", (req, res) => {
   let gridFsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
@@ -21,4 +19,3 @@ router.delete("/delete/:id", (req, res) => {
   console.log("file was deleted");
 });
 
-module.exports = router;

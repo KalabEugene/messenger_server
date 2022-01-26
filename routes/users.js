@@ -1,9 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const jwt = require("jsonwebtoken");
-const User = require("../models/users");
-const auth = require("../middleware/auth");
-const admin = require("firebase-admin");
+import express from "express";
+export const router = express.Router();
+import jwt from "jsonwebtoken";
+import User from "../models/users.js";
+import auth from "../middleware/auth.js";
+import admin from "firebase-admin";
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById({ _id: req.user.id });
@@ -16,11 +16,11 @@ router.post("/", async (req, res) => {
   let user = await User.findOne({ email: fuser.email });
   if (!user) {
     user = new User({
-      about: fuser.aboutUser || "",
-      name: fuser.name || "Noname",
-      profilepicture: fuser.picture || "No photo",
+      about: fuser.aboutUser,
+      name: fuser.name,
+      picture: fuser.picture,
       userId: fuser.uid,
-      nickname: fuser.nickName || fuser.name || "No nickname",
+      nickname: fuser.nickName || fuser.name,
       email: fuser.email,
     });
     await user.save();
@@ -58,4 +58,3 @@ router.delete("/", auth, async (req, res) => {
     return res.status(400).send("Error");
   }
 });
-module.exports = router;

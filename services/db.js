@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const connectDb = () => {
+ function connectDb () {
   return mongoose.connect(process.env.DB_LINK, { useNewUrlParser: true });
 };
 
-module.exports = connectDb;
+export default connectDb;

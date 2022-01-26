@@ -1,41 +1,62 @@
-const express = require("express");
-const router = express.Router();
-const Post = require("../models/post");
-const User = require("../models/users");
-const auth = require("../middleware/auth");
+import express, { query } from "express";
+export const router = express.Router();
+import Post from "../models/post.js";
+import User from "../models/users.js";
+import auth from "../middleware/auth.js";
+import GridFsUpload from "../services/gridfs_upload.js";
 
 router.get("/", auth, async (req, res) => {
-  const posts = await Post.find({}).sort({ createdAt: -1 }).limit(20);
-  res.status(200).send(posts);
+  let count = await Post.count();
+  const resultsPage = 5;
+  const pageNumber = req.query.page;
+  let page = pageNumber >= 1 ? pageNumber : 1;
+  page = page - 1;
+  const posts = await Post.find({})
+    .populate("author")
+    .sort({ createdAt: -1 })
+    .limit(resultsPage)
+    .skip(resultsPage * page);
+  res.status(200).send({ posts, count });
 });
 
-router.get("/popularposts", auth, async (req, res) => {
-  const posts = await Post.find({}).sort({ likes: -1 }).limit(10);
+router.get("/my", auth, async (req, res) => {
+  let count = await Post.count();
+  const resultsPage = 5;
+  const pageNumber = req.query.page;
+  let page = pageNumber >= 1 ? pageNumber : 1;
+  page = page - 1;
+  const posts = await Post.find({ author: req.user.id })
+    .populate("author")
+    .sort({ createdAt: -1 })
+    .limit(resultsPage)
+    .skip(resultsPage * page);
+  res.status(200).send({ posts, count });
+});
+
+router.get("/popular", auth, async (req, res) => {
+  const posts = await Post.find({})
+    .populate("author")
+    .sort({ likes: -1 })
+    .limit(10);
   res.status(200).send(posts);
 });
 
 router.post("/", auth, async (req, res) => {
-  let user = await User.findOne({ _id: req.user.id });
+  let date = new Date();
+  if(req.body.text === undefined){
+    return res.status(400).send("Text must be specified");
+  }
   const post = new Post({
-    text: req.body.text || "Default text",
-    username: user.nickname || "Noname",
-    profilepicture: user.profilepicture || "No photo",
-    userId: req.user.id,
+    text: req.body.text,
+    author: req.user.id,
+    createdAt: date,
   });
   await post.save();
   if (req.files) {
-    let id = require("../services/gridfs_upload").init(req.files.file);
+    let id = GridFsUpload.init(req.files.file);
     await Post.updateOne({ _id: post._id }, { $set: { fileId: id } });
   }
   return res.status(201).json(post);
-});
-
-router.put("/info", auth, async (req, res) => {
-  await Post.updateMany(
-    { userId: req.user.id },
-    { $set: { username: req.body.nickname } }
-  );
-  return res.send(`Posts was updated!`).status(200);
 });
 
 router.put("/:id/likes", auth, async (req, res) => {
@@ -65,4 +86,3 @@ router.delete("/:id", auth, async (req, res) => {
     return res.status(400).send("Error");
   }
 });
-module.exports = router;

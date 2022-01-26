@@ -1,6 +1,7 @@
-const admin = require("firebase-admin");
-const serviceAccount = require("../config/firebase");
-module.exports = {
+import admin from "firebase-admin";
+import serviceAccount from "../config/firebase.js";
+
+const firebase = {
   init() {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
@@ -8,3 +9,4 @@ module.exports = {
     console.log("Firebase service initialized");
   },
 };
+export default firebase

@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
-const streamifier = require("streamifier");
+import mongoose from "mongoose";
+import streamifier from "streamifier";
 
-module.exports = {
+const GridFsUpload = {
   init(file) {
     let filename = file.name;
+    let uploadStream = null;
 
     let gridFsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
       bucketName: "Storage",
@@ -20,3 +21,4 @@ module.exports = {
     return uploadStream.id;
   },
 };
+export default GridFsUpload;
