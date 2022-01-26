@@ -6,16 +6,14 @@ import auth from "../middleware/auth.js";
 import GridFsUpload from "../services/gridfs_upload.js";
 
 router.get("/", auth, async (req, res) => {
-  let count = await Post.count();
-  const resultsPage = 5;
-  const pageNumber = req.query.page;
-  let page = pageNumber >= 1 ? pageNumber : 1;
-  page = page - 1;
+  const count = await Post.count();
+  const limit = req.query.limit ? +req.query.limit : 5;
+  const page = req.query.page ? +req.query.page : 1;
   const posts = await Post.find({})
     .populate("author")
     .sort({ createdAt: -1 })
-    .limit(resultsPage)
-    .skip(resultsPage * page);
+    .limit(limit)
+    .skip(limit * (page - 1));
   res.status(200).send({ posts, count });
 });
 
