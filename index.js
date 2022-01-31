@@ -13,7 +13,7 @@ dotenv.config();
 
 app.use(fileUpload());
 
-import { router as indexRouter } from "./routes/main.js";
+import { router as authRouter } from "./routes/auth.js";
 import { router as postRouter } from "./routes/posts.js";
 import { router as usersRouter } from "./routes/users.js";
 import { router as gridFsRouter } from "./routes/gridfs.js";
@@ -23,9 +23,15 @@ firebase.init();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://pekker.me',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
-app.use("/", indexRouter);
+app.use(cors(corsOptions));
+/* app.options('*', cors())
+ */
+app.use("/auth", authRouter);
 app.use("/posts", postRouter);
 app.use("/users", usersRouter);
 app.use("/gridfs", gridFsRouter);
