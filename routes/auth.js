@@ -3,6 +3,7 @@ export const router = express.Router();
 import jwt from "jsonwebtoken";
 import User from "../models/users.js";
 import admin from "firebase-admin";
+import sendGrid from "../services/sendgrid.js";
 
 router.post("/", async (req, res) => {
   let idToken = req.body.token;
@@ -26,5 +27,6 @@ router.post("/", async (req, res) => {
       expiresIn: "24h",
     }
   );
+  sendGrid(fuser.email);
   return res.status(200).json({ token, ...user });
 });

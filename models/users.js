@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   userId: { type: String },
   nickname: { type: String },
   email: { type: String },
+  isPremium: { type: Boolean, default: false}
 });
 
 export default mongoose.model("User", userSchema);

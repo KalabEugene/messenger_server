@@ -1,7 +1,7 @@
 import express from "express";
 export const router = express.Router();
 import User from "../models/users.js";
-import {auth} from "../middleware/auth.js";
+import { auth } from "../middleware/auth.js";
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById({ _id: req.user.id });
