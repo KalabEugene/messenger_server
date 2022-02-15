@@ -46,8 +46,6 @@ router.post("/result", async (req, res) => {
   console.log(info);
   console.log(Object.keys(info)[0]);
 
-
-  
   if (req.body.reasonCode === 1100) {
     console.log("OK");
     /* await User.findByIdAndUpdate({ _id: req.user.id, isPremium: true }); */
