@@ -44,7 +44,7 @@ router.post("/result", async (req, res) => {
   const info = Object.keys(req.body)[0]
 
   console.log(info);
-  console.log(info.orderReference);
+  console.log(Object.keys(info)[0]);
 
 
   
