@@ -43,7 +43,7 @@ router.post("/result", async (req, res) => {
   /* console.log(req.body); */
   const info = JSON.parse(JSON.stringify(req.body))
 
-  console.log(Object.keys(req.body));
+  console.log(Object.keys(req.body)[0]);
   
   if (req.body.reasonCode === 1100) {
     console.log("OK");
