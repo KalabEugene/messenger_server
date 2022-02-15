@@ -21,7 +21,7 @@ router.post("/buy", auth, async (req, res) => {
     merchantSignature: hash,
     apiVersion: 1,
     language: "ru",
-    serviceUrl: "http://api.pekker.me/wayforpay/result",
+    serviceUrl: "https://api.pekker.me/wayforpay/result",
     orderReference: `Order${date}`,
     orderDate: date,
     amount: req.body.params.price,
