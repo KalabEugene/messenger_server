@@ -41,10 +41,10 @@ router.post("/buy", auth, async (req, res) => {
 
 router.post("/result", async (req, res) => {
   console.log(req.body);
-  const info = Object.keys(req.body)[0]
+  const info = Object.values(req.body)
 
   console.log(typeof info);
-  
+  console.log(info);
 
   if (req.body.reasonCode === 1100) {
     console.log("OK");
