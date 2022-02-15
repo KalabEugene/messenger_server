@@ -41,12 +41,10 @@ router.post("/buy", auth, async (req, res) => {
 
 router.post("/result", async (req, res) => {
   console.log(req.body);
-  const info = JSON.parse(req.body)
   
-  console.log("///////////////////////////////////////////////////");
-  console.log(info);
+  console.log(req.body.reasonCode);
 
-  if (req.body.data.reasonCode === "1100") {
+  if (req.body.reasonCode === "1100") {
     console.log("OK");
     /* await User.findByIdAndUpdate({ _id: req.user.id, isPremium: true }); */
   }
