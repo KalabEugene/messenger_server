@@ -41,7 +41,7 @@ router.post("/buy", auth, async (req, res) => {
 
 router.post("/result", async (req, res) => {
   /* console.log(req.body); */
-  const info = JSON.parse(JSON.stringify(Object.keys(req.body)[0]))
+  const info = JSON.parse((Object.keys(req.body)[0]))
 
   console.log(info);
   
