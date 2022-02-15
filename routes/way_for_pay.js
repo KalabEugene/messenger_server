@@ -43,7 +43,7 @@ router.post("/result", async (req, res) => {
   console.log(req.body);
   const info = Object.keys(req.body)[0]
 
-  console.log(info);
+  console.log(typeof info);
   
 
   if (req.body.reasonCode === 1100) {
