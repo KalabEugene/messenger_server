@@ -39,7 +39,7 @@ router.post("/buy", auth, async (req, res) => {
   return res.status(200).json(info.data.invoiceUrl);
 });
 
-router.post("/result", auth, async (req, res) => {
+router.post("/result", async (req, res) => {
   console.log(req);
 
   if (req.body.data.reasonCode === "1100") {
