@@ -42,7 +42,8 @@ router.post("/buy", auth, async (req, res) => {
 router.post("/result", async (req, res) => {
   /* console.log(req.body); */
   const info = JSON.parse(JSON.stringify(req.body))
-  console.log(info[0]);
+
+  console.log(Object.keys(req.body));
   
   if (req.body.reasonCode === 1100) {
     console.log("OK");
