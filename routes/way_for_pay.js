@@ -44,6 +44,9 @@ router.post("/result", async (req, res) => {
   const info = JSON.parse((Object.keys(req.body)[0]))
 
   console.log(info);
+  console.log(info.orderReference);
+
+
   
   if (req.body.reasonCode === 1100) {
     console.log("OK");
