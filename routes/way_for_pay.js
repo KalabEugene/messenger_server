@@ -7,7 +7,7 @@ import crypto from "crypto";
 
 router.post("/buy", auth, async (req, res) => {
   const date = new Date().getTime();
-
+   
   const string = `${process.env.MERCHANT_ACCOUNT};www.pekker.me;Order${date};${date};${req.body.params.price};UAH;Premium account;1;${req.body.params.price}`;
   const key = process.env.MERCHANT_SIGNATURE;
 

@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
   const corsOptions = {
-  origin: 'http://pekker.me',
+  origin: 'https://pekker.me',
   optionsSuccessStatus: 200 }
 
 app.use(cors(corsOptions));
