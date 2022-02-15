@@ -42,7 +42,7 @@ router.post("/buy", auth, async (req, res) => {
 router.post("/result", async (req, res) => {
 
   const info = Object.keys(req.body)
-  const iinfo = Object.entries(req.body)
+  const iinfo = Object.values(req.body)
   console.log(info);
   console.log(iinfo);
  
