@@ -49,12 +49,12 @@ router.post("/result", async (req, res) => {
     /* await User.findByIdAndUpdate({ _id: req.user.id, isPremium: true }); */
   }
   const date = new Date().getTime();
-  const string = `${req.body.data.orderReference};${req.body.data.status};${date}`;
+  const string = `${req.body.orderReference};${req.body.status};${date}`;
   const key = process.env.MERCHANT_SIGNATURE;
 
   const hash = crypto.createHmac("md5", key).update(string).digest("hex");
   return res.status(200).json({
-    orderReference: req.body.data.orderReference,
+    orderReference: req.body.orderReference,
     status: "accept",
     time: date,
     signature: key,
