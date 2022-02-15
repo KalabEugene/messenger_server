@@ -42,6 +42,8 @@ router.post("/buy", auth, async (req, res) => {
 router.post("/result", async (req, res) => {
   console.log(req.body);
   const info = JSON.parse(req.body)
+  
+  console.log("///////////////////////////////////////////////////");
   console.log(info);
 
   if (req.body.data.reasonCode === "1100") {
