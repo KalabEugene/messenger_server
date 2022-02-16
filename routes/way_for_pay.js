@@ -45,7 +45,7 @@ router.post("/result", async (req, res) => {
   const pars = JSON.parse(info1);
 
   if (pars.reasonCode === 1100) {
-    await User.findOneAndUpdate({ email: pars.email, isPremium: true });
+    await User.findOneAndUpdate({ email: pars.email },{ isPremium: true });
   }
   const date = new Date().getTime();
   const string = `${pars.orderReference};accept;${date}`;

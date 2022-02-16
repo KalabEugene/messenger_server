@@ -25,11 +25,11 @@ firebase.init();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-  const corsOptions = {
+   const corsOptions = {
   origin: 'https://pekker.me',
-  optionsSuccessStatus: 200 }
+  optionsSuccessStatus: 200 } 
 
-app.use(cors(corsOptions));
+app.use(cors( corsOptions ));
 /* app.options('*', cors())*/
 
 app.use("/auth", authRouter);
