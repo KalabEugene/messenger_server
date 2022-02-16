@@ -41,10 +41,10 @@ router.post("/buy", auth, async (req, res) => {
 
 router.post("/result", async (req, res) => {
 
-  const info = Object.keys(req.body)
-  const iinfo = Object.values(req.body)
+  const info = Object.keys(req.body)[0]
+  const info1 = `${info}"ok"}`
   console.log(info);
-  console.log(iinfo);
+  console.log(info1);
  
 
   if (req.body.reasonCode === 1100) {
@@ -54,7 +54,6 @@ router.post("/result", async (req, res) => {
   const date = new Date().getTime();
   const string = `${req.body.orderReference};${req.body.status};${date}`;
   const key = process.env.MERCHANT_SIGNATURE;
-  console.log(req.body.orderReference);
   const hash = crypto.createHmac("md5", key).update(string).digest("hex");
   console.log("OKK");
   return res.status(200).json({
