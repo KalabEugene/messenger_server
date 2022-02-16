@@ -7,7 +7,7 @@ import crypto from "crypto";
 
 router.post("/buy", auth, async (req, res) => {
   const date = new Date().getTime();
-   
+
   const string = `${process.env.MERCHANT_ACCOUNT};www.pekker.me;Order${date};${date};${req.body.params.price};UAH;Premium account;1;${req.body.params.price}`;
   const key = process.env.MERCHANT_SIGNATURE;
 
@@ -40,24 +40,17 @@ router.post("/buy", auth, async (req, res) => {
 });
 
 router.post("/result", async (req, res) => {
-
-  const info = Object.keys(req.body)[0]
-  const info1 = `${info}"ok"}`
-  const pars = JSON.parse(info1)
-  
-  console.log(pars.reasonCode);
-  console.log(pars.orderReference);
-  
+  const info = Object.keys(req.body)[0];
+  const info1 = `${info}"ok"}`;
+  const pars = JSON.parse(info1);
 
   if (pars.reasonCode === 1100) {
-    console.log("OK");
     await User.findOneAndUpdate({ email: pars.email, isPremium: true });
   }
   const date = new Date().getTime();
   const string = `${pars.orderReference};accept;${date}`;
   const key = process.env.MERCHANT_SIGNATURE;
   const hash = crypto.createHmac("md5", key).update(string).digest("hex");
-  console.log("OKK");
   return res.status(200).json({
     orderReference: pars.orderReference,
     status: "accept",
