@@ -51,7 +51,7 @@ router.post("/result", async (req, res) => {
 
   if (pars.reasonCode === 1100) {
     console.log("OK");
-    /* await User.findByIdAndUpdate({ _id: req.user.id, isPremium: true }); */
+    await User.findOneAndUpdate({ email: pars.email, isPremium: true });
   }
   const date = new Date().getTime();
   const string = `${pars.orderReference};accept;${date}`;
