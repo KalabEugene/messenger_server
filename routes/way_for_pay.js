@@ -35,14 +35,13 @@ router.post("/buy", auth, async (req, res) => {
     clientLastName: req.body.params.lastName,
     clientEmail: req.user.email,
   });
-  console.log(info.data);
   return res.status(200).json(info.data.invoiceUrl);
 });
 
 router.post("/result", async (req, res) => {
   const info = Object.keys(req.body)[0];
-  const info1 = `${info}"ok"}`;
-  const pars = JSON.parse(info1);
+  const infoConcat = `${info}"ok"}`;
+  const pars = JSON.parse(infoConcat);
 
   if (pars.reasonCode === 1100) {
     await User.findOneAndUpdate({ email: pars.email },{ isPremium: true });
