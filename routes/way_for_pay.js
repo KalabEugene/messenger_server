@@ -43,8 +43,9 @@ router.post("/result", async (req, res) => {
 
   const info = Object.keys(req.body)[0]
   const info1 = `${info}"ok"}`
-  
-  console.log(info1.reasonCode);
+  const pars = JSON.parse(info1)
+  console.log(pars);
+  console.log(pars.reasonCode);
  
 
   if (req.body.reasonCode === 1100) {
